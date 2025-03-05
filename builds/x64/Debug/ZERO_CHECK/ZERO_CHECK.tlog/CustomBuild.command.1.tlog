@@ -1,0 +1,10 @@
+^C:\USERS\JMUZY\DOWNLOADS\VAMPIRE-SURVIVORS\BUILDS\CMAKEFILES\01B3C8DED4422777E844258F454587A1\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/jmuzy/Downloads/Vampire-Survivors -BC:/Users/jmuzy/Downloads/Vampire-Survivors/builds --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/jmuzy/Downloads/Vampire-Survivors/builds/Vampire-Survivors.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
