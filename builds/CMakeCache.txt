@@ -188,6 +188,12 @@ CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 //The directory containing a CMake configuration file for SDL3.
 SDL3_DIR:PATH=C:/Users/jmuzy/Downloads/Vampire-Survivors/include/SDL3/cmake
 
+//The directory containing a CMake configuration file for SDL3_iamge.
+SDL3_iamge_DIR:PATH=SDL3_iamge_DIR-NOTFOUND
+
+//The directory containing a CMake configuration file for SDL3_image.
+SDL3_image_DIR:PATH=SDL3_image_DIR-NOTFOUND
+
 //Detected architecture ARM32
 SDL_CPU_ARM32:BOOL=0
 
