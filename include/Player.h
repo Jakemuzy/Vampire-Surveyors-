@@ -42,10 +42,10 @@ public:
                 pos.y += movementSpeed;
                 break;
             case (LEFT):
-                pos.x -= movementSpeed;
+                pos.x += movementSpeed;
                 break;
             case (RIGHT):
-                pos.x += movementSpeed;
+                pos.x -= movementSpeed;
                 break;
             default:
                 break;
