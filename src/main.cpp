@@ -7,11 +7,13 @@
 #include <iostream>
 
 #include <Player.h>
+#include <GameObject.h>
 
 static SDL_Window *window = NULL;
 static SDL_Renderer *renderer = NULL;
 int windowWidth = 960, windowHeight = 540;
 Player player(windowWidth, windowHeight);
+GameObject test;
 
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 {
@@ -30,6 +32,8 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     }
 
     player.setCamera(Camera());
+    test = GameObject(renderer, "assets/textures/mario.png");
+
     return SDL_APP_CONTINUE; 
 }
 
@@ -39,6 +43,11 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
     {
         return SDL_APP_SUCCESS; 
     }
+
+    if (event->type == SDL_WINDOW_RESIZABLE){
+        SDL_GetWindowSize(window, &windowWidth, &windowHeight);
+    }
+    
     return SDL_APP_CONTINUE; 
 }
 
@@ -65,14 +74,8 @@ SDL_AppResult SDL_AppIterate(void *appstate)
     player.updateVertices(projection, windowWidth, windowHeight);
     player.draw(renderer);
 
-    std::vector<SDL_Vertex> vertices {
-        {{-100, -100}, {255, 0, 0, 255}, {0, 0}},
-        {{100, -100}, {255, 0, 0, 255}, {0, 0}},
-        {{100 , 100}, {255, 0, 0, 255}, {0, 0}},
-        {{-100 , 100}, {255, 0, 0, 255}, {0, 0}}
-    };
+    test.draw(renderer, player, projection, windowWidth, windowHeight);
 
-    SDL_RenderGeometry(renderer, NULL, &vertices[0], vertices.size(), NULL, 0);
     SDL_RenderPresent(renderer);
 
     return SDL_APP_CONTINUE; 
