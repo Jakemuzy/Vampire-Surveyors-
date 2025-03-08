@@ -1,31 +1,49 @@
-struct vec3
-{
-    float x, y, z;
-};
-
-struct vec2{
-    float x, y;
-};
-
-struct mat3{
-    float m11, m12, m13;
-    float m21, m22, m23;
-    float m31, m32, m33;
-};
+#include <jml.h>
+#include <SDL3/SDL.h>
+#include <iostream>
+#include <vector>
 
 enum directions {
     UP, DOWN, LEFT, RIGHT
 };
 
 
-/* Implement, model matrix, view matrix, projection matrix, and then viewport transform*/
+/* Implement, model matrix, view matrix, projection matrix, and then screenspace transform*/
 class Camera{
 private:
     vec2 pos;
+    mat3 view;
+    int windowWidth, windowHeight;
+
 public:
-    Camera(){
-        pos.x = 0;
-        pos.y = 0; 
+    Camera()
+    {
+        view[0][2] = 0;
+        view[1][2] = 0;
+    }
+
+    Camera(int width, int height){
+
+    }
+
+    void move(vec2 newPos)
+    {
+        pos = newPos;
+        view[0][2] = newPos.x;
+        view[1][2] = newPos.y;
+    }
+
+    vec2& getPos(){
+        return pos;
+    }
+
+    // Inverts so moves the world while camera stays at the origin 
+    mat3& getViewMatrix(){
+        return view.inverse();
+    }
+
+    void Camera::DrawCameraViewport(SDL_Renderer* renderer)
+    {
 
     }
 };
