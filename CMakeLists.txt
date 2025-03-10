@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.18)
 
 PROJECT(Vampire-Survivors)
 
-set (CMAKE_CXX_STANDARD 11)
+set (CMAKE_CXX_STANDARD 17)
 set(SDL3_DIR ${PROJECT_SOURCE_DIR}/include/SDL3/cmake)
 set(SDL3_image_DIR ${PROJECT_SOURCE_DIR}/include/SDL3_image/cmake)
 

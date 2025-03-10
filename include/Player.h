@@ -1,5 +1,6 @@
 
 #include <Camera.h>
+#include <Animator.h>
 
 class Player{
 private:
@@ -8,8 +9,11 @@ private:
     vec2 pos;
     mat3 model;
 
-    SDL_Rect boundingBox;
-    std::vector<SDL_Vertex> vertices;
+    Animation test;
+    SDL_FRect boundingBox;
+
+    int count = 0;
+
 public:
     Player(){
         movementSpeed = 0.05f;
@@ -21,7 +25,11 @@ public:
         movementSpeed = 0.05f;
         pos.x = 0; 
         pos.y = 0;
+    }
 
+
+    void loadAllAnimations(std::string folderPath, SDL_Renderer *renderer){
+        test = loadAnimation("assets/animations/Jump/", renderer);
     }
 
     void setCamera(Camera& camera){
@@ -71,11 +79,7 @@ public:
         vec2 screen = screenSpace(width, height, modelViewProj[0][2], modelViewProj[1][2]);
         float tX = screen.x, tY = screen.y;
 
-        vertices = {
-            {{tX - 100, tY - 100}, {255, 0, 0, 255}, {0, 0}},
-            {{tX, tY + 100}, {255, 0, 0, 255}, {0, 0}},
-            {{tX + 100, tY - 100}, {255, 0, 0, 255}, {0, 0}}
-        };
+        boundingBox = {tX, tY, 100, 100};
     }
 
     vec2& screenSpace(float width, float height, float x, float y){
@@ -88,13 +92,19 @@ public:
     }
 
 
-    std::vector<SDL_Vertex>& getVertices()
-    {
-        return vertices;
-    }
-
     void draw(SDL_Renderer* renderer){
-        SDL_RenderGeometry(renderer, NULL, &vertices[0], vertices.size(), NULL, 0);
+        int tester = 0;
+        if(count >= 5000)
+            tester++;
+        if(count >= 10000)
+            tester++;
+        if(count >= 15000)
+            tester++;
+        if(count >= 30000)
+            count = 0;
+            
+        count++;
+        SDL_RenderTexture(renderer, test.sprites[tester], NULL, &boundingBox);
     }
 };
 

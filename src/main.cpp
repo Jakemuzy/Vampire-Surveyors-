@@ -13,6 +13,8 @@ static SDL_Window *window = NULL;
 static SDL_Renderer *renderer = NULL;
 int windowWidth = 960, windowHeight = 540;
 Player player(windowWidth, windowHeight);
+SDL_Texture *backgroundSprite;
+GameObject background;
 GameObject test;
 
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
@@ -32,7 +34,9 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     }
 
     player.setCamera(Camera());
+    player.loadAllAnimations("Test", renderer);
     test = GameObject(renderer, "assets/textures/mario.png");
+    background = GameObject(renderer, "assets/testBackground.png");
 
     return SDL_APP_CONTINUE; 
 }
@@ -67,14 +71,17 @@ SDL_AppResult SDL_AppIterate(void *appstate)
 
     /* clear the window to the draw color. */
     SDL_RenderClear(renderer);
+    
 
     mat3 projection;
     projection = projection.orthographic(0, windowWidth, 0, windowHeight);
 
+    background.draw(renderer, player, projection, windowWidth, windowHeight, true);
+
     player.updateVertices(projection, windowWidth, windowHeight);
     player.draw(renderer);
 
-    test.draw(renderer, player, projection, windowWidth, windowHeight);
+    test.draw(renderer, player, projection, windowWidth, windowHeight, false);
 
     SDL_RenderPresent(renderer);
 
