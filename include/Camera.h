@@ -38,7 +38,7 @@ public:
     }
 
     // Inverts so moves the world while camera stays at the origin 
-    mat3& getViewMatrix(){
+    mat3 getViewMatrix(){
         return view.inverse();
     }
 

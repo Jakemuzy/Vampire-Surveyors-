@@ -8,14 +8,16 @@
 
 #include <Player.h>
 #include <GameObject.h>
+#include <UI.h>
+#include <Scene.h>
 
 static SDL_Window *window = NULL;
 static SDL_Renderer *renderer = NULL;
 int windowWidth = 960, windowHeight = 540;
-Player player(windowWidth, windowHeight);
-SDL_Texture *backgroundSprite;
-GameObject background;
-GameObject test;
+//Player player(windowWidth, windowHeight);
+UI elements(windowWidth, windowHeight);
+Scene* test = nullptr;
+//GameObject test;
 
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 {
@@ -33,10 +35,9 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
         return SDL_APP_FAILURE;
     }
 
-    player.setCamera(Camera());
-    player.loadAllAnimations("Test", renderer);
-    test = GameObject(renderer, "assets/textures/mario.png");
-    background = GameObject(renderer, "assets/testBackground.png");
+    //player.setCamera(Camera());
+    //player.loadAllAnimations("Test", renderer);
+    //test = GameObject(renderer, "assets/textures/mario.png");
 
     return SDL_APP_CONTINUE; 
 }
@@ -48,40 +49,77 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
         return SDL_APP_SUCCESS; 
     }
 
-    if (event->type == SDL_WINDOW_RESIZABLE){
+    if(event->type == SDL_EVENT_WINDOW_RESIZED){
         SDL_GetWindowSize(window, &windowWidth, &windowHeight);
+        elements.resize(windowWidth, windowHeight);
     }
-    
+
+    //UI Handling
+
+    if(event->type == SDL_EVENT_MOUSE_BUTTON_DOWN){
+        vec2 mousePos;
+        SDL_GetMouseState(&mousePos.x, &mousePos.y);
+
+        for(auto& UI : elements.buttons){
+            
+            if (mousePos.x < UI.rect.x + UI.rect.w && mousePos.x > UI.rect.x && mousePos.y < UI.rect.y + UI.rect.h && mousePos.y > UI.rect.y)
+            {
+                UI.color[0] = 0;
+                UI.color[1] = 255;
+                UI.clicked = true;
+            }
+            else 
+            {
+                continue;
+            }
+               
+            if(UI.type == QUIT){
+                return SDL_APP_SUCCESS;
+            }
+            else if (UI.type == START){
+                std::cout << "start \n";
+                elements.startGame();
+                test = new Scene(windowWidth, windowHeight, renderer);
+                break;
+            }
+                
+        }
+        
+    } else if (event->type == SDL_EVENT_MOUSE_BUTTON_UP)
+    {
+        for (auto &UI : elements.buttons)
+        {
+            UI.color[0] = 255;
+            UI.color[1] = 0;
+            UI.clicked = false;
+        }
+    }
+
     return SDL_APP_CONTINUE; 
 }
 
 SDL_AppResult SDL_AppIterate(void *appstate)
 {
-    //Movement
-    const bool* keyStates = SDL_GetKeyboardState(NULL);
-    if(keyStates[SDL_SCANCODE_W])
-        player.move(UP);
-    if (keyStates[SDL_SCANCODE_A])
-        player.move(LEFT);
-    if(keyStates[SDL_SCANCODE_S])
-        player.move(DOWN);
-    if (keyStates[SDL_SCANCODE_D])
-        player.move(RIGHT);
     
 
     /* clear the window to the draw color. */
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0); 
     SDL_RenderClear(renderer);
     
 
-    mat3 projection;
-    projection = projection.orthographic(0, windowWidth, 0, windowHeight);
+    if(test!= nullptr){
+        test->processInput();
+        test->render(renderer);
+    }
+    
 
-    background.draw(renderer, player, projection, windowWidth, windowHeight, true);
+    elements.draw(renderer);
 
-    player.updateVertices(projection, windowWidth, windowHeight);
-    player.draw(renderer);
+    //player.updateVertices(projection, windowWidth, windowHeight);
+    //player.draw(renderer);
 
-    test.draw(renderer, player, projection, windowWidth, windowHeight, false);
+    //test.draw(renderer, player, projection, windowWidth, windowHeight);
+
 
     SDL_RenderPresent(renderer);
 
