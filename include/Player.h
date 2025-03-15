@@ -82,7 +82,7 @@ public:
         boundingBox = {tX, tY, 100, 100};
     }
 
-    vec2& screenSpace(float width, float height, float x, float y){
+    vec2 screenSpace(float width, float height, float x, float y){
         vec2 screen;
 
         screen.x = (x/2) + (width/2);
