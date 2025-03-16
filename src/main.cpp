@@ -11,6 +11,8 @@
 #include <UI.h>
 #include <Scene.h>
 
+#include <Gamble.h>
+
 static SDL_Window *window = NULL;
 static SDL_Renderer *renderer = NULL;
 int windowWidth = 960, windowHeight = 540;
@@ -21,6 +23,15 @@ Scene* test = nullptr;
 
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 {
+
+//debug
+    for(int i= 0;i<100;i++){
+        printf("%f\n",get_upgrade_prob(i));
+
+    }
+
+
+
     SDL_SetAppMetadata("Vampire-Survivors", "1.0", "com.vampire-survivors");
 
     if (!SDL_Init(SDL_INIT_VIDEO))
@@ -122,7 +133,6 @@ SDL_AppResult SDL_AppIterate(void *appstate)
 
 
     SDL_RenderPresent(renderer);
-
     return SDL_APP_CONTINUE; 
 }
 

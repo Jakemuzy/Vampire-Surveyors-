@@ -42,8 +42,9 @@ public:
         return view.inverse();
     }
 
-    void Camera::DrawCameraViewport(SDL_Renderer* renderer)
-    {
+    void DrawCameraViewport(SDL_Renderer* renderer);
 
-    }
 };
+void Camera::DrawCameraViewport(SDL_Renderer* renderer) {
+    // Function implementation goes here
+}

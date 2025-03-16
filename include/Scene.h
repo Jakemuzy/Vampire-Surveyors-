@@ -20,7 +20,8 @@ public:
         windowWidth = width;
         
         player = Player(width, height);
-        player.setCamera(Camera());
+        Camera tempCam = Camera();
+        player.setCamera(tempCam);
         player.loadAllAnimations("Test", renderer);
 
         projection = projection.orthographic(0, width, 0, height);
